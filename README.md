@@ -41,7 +41,7 @@ All pull requests will go through 2 seperate approvals to ensure work flow on gi
 
 System Selection:
 
-Windows 2019 Server
-PowerShell
-VScode
-Windows 10 Machine
+- Windows 2019 Server
+- PowerShell
+- VScode
+- Windows 10 Machine
