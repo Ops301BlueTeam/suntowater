@@ -11,6 +11,8 @@ Several versions of VPN tunneling were also looked at and the pros and con's wei
 
 It was settled that after a working VM model is achieved the VM's will be uploaded and each member of the team will download them in order to ensure it is available for presentation day.
 
+Trello link was sent to the instructor.
+
 ## MVP
 
 1. The goal is to have a singular Powershell script that, when executed on a new installation of Windows Server, can fully standup all requisite services to make the server into a DC.
@@ -18,3 +20,5 @@ It was settled that after a working VM model is achieved the VM's will be upload
 2. Deploy a RADIUS system that raises a captive portal for new network users and authenticates them using AD credentials.
 
 3. Build a site-to-site VPN tunnel, altering at least one parameter compared to what was performed in class (e.g. router used, cloud, etc.).
+
+![Order of Operations](Assets/OrderOfOperations.png)
