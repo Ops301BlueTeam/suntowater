@@ -51,5 +51,3 @@ System Selection:
 # [Project Pitch <-------](projectPitch.md)
 
 # [Repo and Tooling <-------](repoAndTooling.md)
-
-# [Project Pitch <-------](O)
