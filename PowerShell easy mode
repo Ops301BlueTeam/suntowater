@@ -1,0 +1,111 @@
+New-NetIPAddress -IPAddress 0.0.0.0 -DefaultGateway 0.0.0.0 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex
+Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 0.0.0.0
+
+Get-VM
+#yeilds the names then,
+Rename-vm example "exaple renamed"
+
+#get into powershell admin,
+Install-ADDSForest-Domainname vdom.local -installDNS
+#replace vdom.locak with correct name of the forest and domain
+
+#type the Directory Service Restore Mode (DSRM) Password twice and press Enter to save the password,
+#the DSRM password is referred to as the SafeModeAdministratorPassword in Windows PowerShell
+
+#type A and press Enter to configure the server as a domain controller and install DNS
+#for yes on the menu,
+
+#the Domain controller promotion will comples and the server will reboot,
+#Finalizing the process
+
+#installing a freakin forsest,
+
+Install-ADDSForest -CreateDnsDelegation:$false,
+-DomainName "NAME_IT",
+-DomainNetbiosName "NAME_IT",
+-DatabasePath "\ \ \",
+-installDns:$true,
+-LogPath "\ \ \",
+-NorebootOnCompletion:$false,
+-SysvolPath "\ \ \",
+-Force:$true,
+-DomainMode "example",
+-ForestMode "example"
+
+#enter DSRM password
+
+#if you wanted, 
+#import AD-Domain-Services powershell module by import-module servermanager.
+#run the installation command "Add-WindowsFeature RSAT-ADDS-Tools"
+
+
+ Get-Module ActiveDirectory
+ #then
+ New-ADOrganizationalUnit -name '301 project' #add name of the new client
+ Get-ADOrganizationalUnit 'OU=301 project,DC=name,DC=com' #fill in with the right DC
+#test
+ $NewOU = @{
+     'Name' = 'Automatic Drivers'
+     'Description' = 'People that drive automatic cars'
+     'Path' = 'OU=people,DC=name,DC=com'
+     'ProtectedFromAccidentalDeletion' = $true
+ }
+ New-ADOrganizationalUnit @NewOU
+#check if it worked.
+ Get-ADOrganizationalUnit 'OU=Automatic Drivers,OU=People,DC=name,DC=com'
+
+
+ # to add a single 
+ New-ADUser -Name "Harrison Evans" -GivenName "Harriosn" -Surname "Evans",
+ -SamAccountName "H.Evans" -UserPrincipalName "H.Evans@example.com",
+ -path "OU=301project,DC=name,DC=com",
+ -AccountPassword(Read-Host -AsSecureString "input Password") -Enabled $true
+
+
+ #to add bulk via CSV file.
+ #FirstName,LastName,Username,Department,Password,OU
+
+ #enter a path to you import CSV file
+ $ADUsers = Import-Csv c:\path\newusers.csv
+
+ Foreach ($User in $ADUsers)
+ {
+        $Username = $User.Username
+        $password = $User.Password
+        $Firstname = $User.FirstName
+        $Lastname = $User.LastName
+    $Department = $User.Department
+        $OU =$User.ou
+        #check if the user account already exists in AD
+        if (Get-ADUser -F {SamAccountName -eq $Username})
+        {        
+                Write-Warning "A user account $Username has already exist in Active Directory."
+        }
+        else
+        {       
+            #if a user does not exist then create a new user account.
+        #account will be created in the OU listed in the $OU variable in the CSV file; dont forget to change the domain name in the "-UserPrincipalName" variable
+            New-ADUser `
+            -SamAccountName $Username `
+            -UserPrincipalName "$Username@yourdomain.com" `
+            -Name "$Firstname $lastname" `
+            -GivenName $Firstname `
+            -Surname $Lastname `
+            -Enabled $true `
+            -ChangePasswordAtLogon $true `
+            -DisplayName "$lastname, $firstname" `
+            -Department $Department `
+            -Path $OU `
+            -AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force)
+            
+
+        }
+    
+            
+}
+
+# if you wnated to check a single person
+#Get-ADUser example -Properties CanonicalName, -Enabled, -GivenName, -Surname, -Name, -UserPrincipalName,
+#SamAccountName, whenCreated, PasswordLastSet 
+ 
+
